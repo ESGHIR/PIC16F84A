@@ -1,0 +1,54 @@
+MPLINK 4.40, Linker
+Linker Map File - Created Thu Mar 11 18:24:15 2021
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000000
+                   .org_1       code   0x000000    program   0x000002
+                   .org_2       code   0x000005    program   0x0000c2
+.config_2007_PROGRAMME1.O       code   0x002007    program   0x000002
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000000      
+                            0x000005    0x000065      
+                            0x002007    0x002007      
+            99 out of 1094 program addresses used, program memory utilization is 9%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                   boucle   0x00000b    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                    debut   0x000005    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                    delai   0x000050    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                   delai1   0x00004e    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                  delai1m   0x00005d    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                   delai2   0x00004c    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                  delai22   0x00005b    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                   delaii   0x00005f    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                    tempo   0x00004a    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+      tempo_clignotements   0x000059    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                    debut   0x000005    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                   boucle   0x00000b    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                    tempo   0x00004a    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                   delai2   0x00004c    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                   delai1   0x00004e    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                    delai   0x000050    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+      tempo_clignotements   0x000059    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                  delai22   0x00005b    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                  delai1m   0x00005d    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+                   delaii   0x00005f    program     static C:\Users\SONY\Desktop\programme1\programme1.asm
+
+

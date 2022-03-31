@@ -1,0 +1,4 @@
+Warning[205] C:\USERS\SONY\DESKTOP\PROGRAMME1\PROGRAMME1.ASM 17 : Found directive in column 1. (LIST)
+Warning[205] C:\USERS\SONY\DESKTOP\PROGRAMME1\PROGRAMME1.ASM 19 : Found directive in column 1. (__CONFIG)
+Message[302] C:\USERS\SONY\DESKTOP\PROGRAMME1\PROGRAMME1.ASM 66 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[203] C:\USERS\SONY\DESKTOP\PROGRAMME1\PROGRAMME1.ASM 222 : Found opcode in column 1. (return)

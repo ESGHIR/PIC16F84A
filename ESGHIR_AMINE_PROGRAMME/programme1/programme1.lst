@@ -1,0 +1,422 @@
+MPASM  5.42                    PROGRAMME1.ASM   3-11-2021  18:24:13         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;******************************
+                      00002 ;* ESGHIR AMINE               *
+                      00003 ;******************************
+                      00004 ;* MASTER ESE                 *
+                      00005 ;******************************
+                      00006 ;*******************************
+                      00007 ;* le premiere programme       *
+                      00008 ;*******************************
+                      00009 ;* Gestion de 2 feux           *
+                      00010 ;*******************************
+                      00011                                                                                                         
+                                                                                                    
+                      00012                                 
+                      00013 ; V  O  R     V  O  R
+                      00014 ; 8  4  2  1  8  4  2  1 PORTB
+                      00015 
+                      00016 
+Warning[205]: Found directive in column 1. (LIST)
+                      00017 LIST p=16F84A   ; Utilisation du circuit 16F84A
+                      00018  #include <p16F84A.inc>
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ;  MPASM PIC16F84A processor include
+                      00005 ; 
+                      00006 ;  (c) Copyright 1999-2011 Microchip Technology, All rights reserved
+                      00007 ;==========================================================================
+                      00008 
+                      00201         LIST
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3FFA           00019 __CONFIG _CP_OFF & _WDT_OFF & _PWRTE_OFF & _HS_OSC ; la configuration de pic
+                      00020 
+                      00021 
+                      00022 ; Equivalence registres
+                      00023 ;***********************
+                      00024 
+  00000006            00025 PORTB           equ             0x0006  ; Adresse du portb
+  00000086            00026 TRISB           equ             0x0086  ; Adresse du registre de direction du porta
+  00000003            00027 STATUS          equ             0x0003  ; Le bit 5 permet d'acceder à la Banque 1 ou 0 
+                      00028                                         ; ce qui donne acces au TRIS ou au PORT 
+                      00029 ; Constantes
+                      00030 ;************
+                      00031 
+  00000014            00032 DUREE2R         equ             14h             ; 20 secondes
+  00000002            00033 DUREEO          equ             02h             ; 2 secondes
+  00000004            00034 DUREEV          equ             04h             ; 4 secondes ----------- clignetement 
+                      00035 
+                      00036 ;* Reservation memoire *
+                      00037 ;***********************
+                      00038 
+                      00039 ; Les registres occupent la RAM jusqu'en OBh
+                      00040 
+  0000000C            00041 COMPT           equ             0Ch
+MPASM  5.42                    PROGRAMME1.ASM   3-11-2021  18:24:13         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  0000000D            00042 COMPT1          equ             0Dh
+  0000000E            00043 COMPT2          equ             0Eh
+  0000000F            00044 DUREE           equ             0Fh
+                      00045 
+                      00046 
+                      00047 ;***************
+                      00048 ;Initialisation*
+                      00049 ;***************
+0000                  00050                 org             00h             ; Apres le reset le PC pointe l'adresse 00
+                      00051 
+0000   2805           00052                 goto            debut           ; On saute les 5 premiers octets car à l'adresse
+                      00053                                                 ; 04 on a l'adresse d'interruption
+                      00054                                                 ; On prend l'habitude de ne pas ecrire sur ce segment
+                      00055                                                 ; en sautant simplement jusqu'apres ce segment
+                      00056 
+                      00057 
+0005                  00058                 org             05h
+                      00059 
+                      00060 
+0005                  00061 debut           
+0005   0186           00062                 clrf            PORTB           
+0006   1683           00063                 bsf             STATUS,05       ; Selection de Bank 1 pour l'accès au TRIS
+                      00064         
+0007   3000           00065                 movlw           00h             ;
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0008   0086           00066                 movwf           TRISB           ; Declaration du portb en sortie
+0009   1283           00067                 bcf             STATUS,05       ; Selection de Bank 0 pour l'accès au PORT
+000A   0186           00068                 clrf            PORTB           ; Extinction de toutes les LEDS
+                      00069 
+                      00070 ;*********************
+                      00071 ;Programme principal *
+                      00072 ;*********************
+                      00073 
+                      00074 ; 1---On allume le feu "rouge 1" et le feu "vert 2" et on eteint les autres feux
+                      00075 
+000B                  00076 boucle
+000B   1206           00077                 BCF PORTB,4
+000C   3002           00078                 movlw           02h             ; FR1 et FV2 sont allumes
+000D   0086           00079                 movwf           PORTB   
+                      00080 ;---------------------4 clignotement V2
+000E   1386           00081                                 BCF PORTB,7
+000F   2059           00082                 call tempo_clignotements ; duré 0.5s
+                      00083 
+0010   1786           00084                 BSF PORTB,7
+0011   2059           00085                 call tempo_clignotements ; duré 0.5s
+                      00086 
+0012   1386           00087                 BCF PORTB,7
+0013   2059           00088                 call tempo_clignotements ; duré 0.5s
+                      00089 
+0014   1786           00090                 BSF PORTB,7
+0015   2059           00091                 call tempo_clignotements ; duré 0.5s
+0016   1386           00092                                 BCF PORTB,7
+0017   2059           00093                 call tempo_clignotements  ; duré 0.5s
+MPASM  5.42                    PROGRAMME1.ASM   3-11-2021  18:24:13         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00094 
+0018   1786           00095                 BSF PORTB,7
+0019   2059           00096                 call tempo_clignotements ; duré 0.5s
+                      00097 
+001A   1386           00098                 BCF PORTB,7
+001B   2059           00099                 call tempo_clignotements ; duré 0.5s
+                      00100 
+001C   1786           00101                 BSF PORTB,7
+001D   2059           00102                 call tempo_clignotements ; duré 0.5s
+                      00103 ;----------------------------------------------
+                      00104 
+                      00105 ; 2---On allume le feu "rouge 1" et le feu "jeune 2" et on eteint les autres feux
+001E   1206           00106                 BCF PORTB,4
+001F   3042           00107                 movlw           42h             ; FR1 et FO2 sont allumes
+0020   0086           00108                 movwf           PORTB   
+0021   3002           00109                 movlw           DUREEO          ; 
+0022   008F           00110                 movwf           DUREE           ; duree des feux 2s 
+0023   204A           00111                 call            tempo   
+                      00112 
+                      00113 ; 3---On allume le feu "vert 1" et le feu "rouge 2" et on eteint les autres feux
+                      00114         
+0024   3028           00115                 movlw           28h             ; FR1 et FO2 sont allumes
+0025   0086           00116                 movwf           PORTB   
+0026   3014           00117                 movlw           DUREE2R         ; 
+0027   008F           00118                 movwf           DUREE           ; duree des feux 20s
+0028   1606           00119                 BSF PORTB,4     
+0029   204A           00120                 call            tempo   
+                      00121 
+                      00122 ; 4---On allume le feu "vert 1" et le feu "rouge 2" et on eteint les autres feux
+002A   1206           00123                 BCF PORTB,4
+002B   3020           00124                 movlw           20h             ; FR1 et FO2 sont allumes
+002C   0086           00125                 movwf           PORTB   
+                      00126 ;---------------------------------4 fois clignotement V1
+002D   1186           00127                                 BCF PORTB,3
+002E   2059           00128                 call tempo_clignotements  ;duré 0.5s
+                      00129 
+002F   1586           00130                 BSF PORTB,3
+0030   2059           00131                 call tempo_clignotements ;duré 0.5s
+                      00132 
+0031   1186           00133                 BCF PORTB,3
+0032   2059           00134                 call tempo_clignotements ;duré 0.5s
+                      00135 
+0033   1586           00136                 BSF PORTB,3
+0034   2059           00137                 call tempo_clignotements ;duré 0.5s
+0035   1186           00138                                 BCF PORTB,3
+0036   2059           00139                 call tempo_clignotements ;duré 0.5s
+                      00140 
+0037   1586           00141                 BSF PORTB,3
+0038   2059           00142                 call tempo_clignotements ;duré 0.5s
+                      00143 
+0039   1186           00144                 BCF PORTB,3
+003A   2059           00145                 call tempo_clignotements ;duré 0.5s
+                      00146 
+MPASM  5.42                    PROGRAMME1.ASM   3-11-2021  18:24:13         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+003B   1586           00147                 BSF PORTB,3
+003C   2059           00148                 call tempo_clignotements ;duré 0.5s
+                      00149 ;----------------------------------------------
+                      00150 ; 5---On allume le feu "jeune 1" et le feu "rouge 2" et on eteint les autres feux
+003D   1206           00151                 BCF PORTB,4
+003E   3024           00152                 movlw           24h             ; FR1 et FO2 sont allumes
+003F   0086           00153                 movwf           PORTB   
+0040   3002           00154                 movlw           DUREEO          ; 
+0041   008F           00155                 movwf           DUREE           ; duree des feux 2s
+0042   204A           00156                 call            tempo   
+                      00157 
+                      00158 ; 6---On allume le feu "rouge 1" et le feu "vert 2" et on eteint les autres feux
+                      00159                 
+0043   3082           00160                 movlw           82h             ; FR1 et FO2 sont allumes
+0044   0086           00161                 movwf           PORTB   
+0045   3014           00162                 movlw           DUREE2R         ; 
+0046   008F           00163                 movwf           DUREE           ; duree des feux 20s
+0047   1606           00164                 BSF PORTB,4 
+0048   204A           00165                 call            tempo   
+                      00166 
+0049   280B           00167                 goto            boucle          ; feu permanent
+                      00168 
+                      00169 
+                      00170 ;******************
+                      00171 ; SOUS PROGRAMME  *
+                      00172 ;******************
+                      00173 
+                      00174 ; SP tempo par passage de parametre duree est en seconde *
+                      00175 ;*************************************************************************
+                      00176 
+004A                  00177 tempo
+                      00178 
+004A   300A           00179                 movlw           0x000A          ; chargement de COMPT2 DE 10
+004B   008E           00180                 movwf           COMPT2          ; 
+004C                  00181 delai2
+004C   30C8           00182                 movlw           0x00C8          ; chargement de COMPT1 DE 200
+004D   008D           00183                 movwf           COMPT1          ; 
+004E                  00184 delai1
+004E   30A5           00185                 movlw           0x00A5          ; chargement de COMPT de 165
+004F   008C           00186                 movwf           COMPT
+0050                  00187 delai
+0050   0B8C           00188                 decfsz          COMPT,1         ; Le temps de decompter 165 valeurs 
+0051   2850           00189                 goto            delai           ; calcul du temps : 1 instruction =Tquartz/4=1µs =1 cycl
+                            e
+                      00190                                                 ; l'instruction decfz est de 2 cycles
+                      00191                                                 ; 2 instructions = 3 µs repeter 165 fois t=495 µs + 2 in
+                            st =497µs
+0052   0B8D           00192                 decfsz          COMPT1,1        ; ON execute la boucle de 497µs 200 fois + 2 instr dont 
+                            1 à 2 cycle
+0053   284E           00193                 goto            delai1          ; calcul du temps : 500µs*200=100ms on neglige les 5µs r
+                            stant
+                      00194 
+0054   0B8E           00195                 decfsz          COMPT2,1        ; ON execute les boucles de 100 ms 10 fois  
+MPASM  5.42                    PROGRAMME1.ASM   3-11-2021  18:24:13         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0055   284C           00196                 goto            delai2          ; calcul du temps : 100ms*10=1s
+                      00197 
+0056   0B8F           00198                 decfsz          DUREE,1         ; ON execute les  boucles de la valeur de duree   
+0057   284A           00199                 goto            tempo           ; calcul du temps : duree*100ms
+                      00200                 
+0058   0008           00201                 return
+0059                  00202 tempo_clignotements 
+0059   3005           00203                 movlw           0x0005          ; chargement de COMPT2 DE 10
+005A   008E           00204                 movwf           COMPT2          ; 
+005B                  00205 delai22
+005B   30C8           00206                 movlw           0x00C8          ; chargement de COMPT1 DE 200
+005C   008D           00207                 movwf           COMPT1          ; 
+005D                  00208 delai1m
+005D   30A5           00209                 movlw           0x00A5          ; chargement de COMPT de 165
+005E   008C           00210                 movwf           COMPT
+005F                  00211 delaii
+005F   0B8C           00212                 decfsz          COMPT,1         ; Le temps de decompter 165 valeurs 
+0060   285F           00213                 goto            delaii          ; calcul du temps : 1 instruction =Tquartz/4=1µs =1 cycl
+                            e
+                      00214                                                 ; l'instruction decfz est de 2 cycles
+                      00215                                                 ; 2 instructions = 3 µs repeter 165 fois t=495 µs + 2 in
+                            st =497µs
+0061   0B8D           00216                 decfsz          COMPT1,1        ; ON execute la boucle de 497µs 200 fois + 2 instr dont 
+                            1 à 2 cycle
+0062   285D           00217                 goto            delai1m         ; calcul du temps : 500µs*200=100ms on neglige les 5µs r
+                            stant
+                      00218 
+0063   0B8E           00219                 decfsz          COMPT2,1        ; ON execute les boucles de 100 ms 5 fois  
+0064   285B           00220                 goto            delai22
+                      00221    
+Warning[203]: Found opcode in column 1. (return)
+0065   0008           00222 return
+                      00223                 end
+MPASM  5.42                    PROGRAMME1.ASM   3-11-2021  18:24:13         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+C                                 00000000
+COMPT                             0000000C
+COMPT1                            0000000D
+COMPT2                            0000000E
+DC                                00000001
+DUREE                             0000000F
+DUREE2R                           00000014
+DUREEO                            00000002
+DUREEV                            00000004
+EEADR                             00000009
+EECON1                            00000088
+EECON2                            00000089
+EEDATA                            00000008
+EEIE                              00000006
+EEIF                              00000004
+F                                 00000001
+FSR                               00000004
+GIE                               00000007
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+NOT_PD                            00000003
+NOT_RBPU                          00000007
+NOT_TO                            00000004
+OPTION_REG                        00000081
+PCL                               00000002
+PCLATH                            0000000A
+PORTA                             00000005
+PORTB                             00000006
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RD                                00000000
+RP0                               00000005
+MPASM  5.42                    PROGRAMME1.ASM   3-11-2021  18:24:13         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RP1                               00000006
+STATUS                            00000003
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_CONFIG                           00002007
+_CP_OFF                           00003FFF
+_CP_ON                            0000000F
+_DEVID1                           00002006
+_HS_OSC                           00003FFE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_LP_OSC                           00003FFC
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC                           00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FFD
+__16F84A                          00000001
+__DEBUG                           1
+boucle                            0000000B
+debut                             00000005
+delai                             00000050
+delai1                            0000004E
+delai1m                           0000005D
+delai2                            0000004C
+MPASM  5.42                    PROGRAMME1.ASM   3-11-2021  18:24:13         PAGE  8
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+delai22                           0000005B
+delaii                            0000005F
+tempo                             0000004A
+tempo_clignotements               00000059
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : X----XXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXX---------- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    98
+Program Memory Words Free:   926
+
+
+Errors   :     0
+Warnings :     3 reported,     0 suppressed
+Messages :     1 reported,     0 suppressed
+
+

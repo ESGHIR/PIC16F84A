@@ -1,0 +1,12 @@
+Warning[205] C:\USERS\SONY\DESKTOP\PROGRAMME2\ESGHIR_PROGRAMME2.ASM 1 : Found directive in column 1. (LIST)
+Warning[205] C:\USERS\SONY\DESKTOP\PROGRAMME2\ESGHIR_PROGRAMME2.ASM 3 : Found directive in column 1. (__CONFIG)
+Warning[207] C:\USERS\SONY\DESKTOP\PROGRAMME2\ESGHIR_PROGRAMME2.ASM 13 : Found label after column 1. (start)
+Message[302] C:\USERS\SONY\DESKTOP\PROGRAMME2\ESGHIR_PROGRAMME2.ASM 16 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\SONY\DESKTOP\PROGRAMME2\ESGHIR_PROGRAMME2.ASM 17 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[207] C:\USERS\SONY\DESKTOP\PROGRAMME2\ESGHIR_PROGRAMME2.ASM 24 : Found label after column 1. (loop)
+Warning[207] C:\USERS\SONY\DESKTOP\PROGRAMME2\ESGHIR_PROGRAMME2.ASM 34 : Found label after column 1. (decomptage)
+Warning[207] C:\USERS\SONY\DESKTOP\PROGRAMME2\ESGHIR_PROGRAMME2.ASM 41 : Found label after column 1. (MM)
+Warning[207] C:\USERS\SONY\DESKTOP\PROGRAMME2\ESGHIR_PROGRAMME2.ASM 49 : Found label after column 1. (KK)
+Warning[203] C:\USERS\SONY\DESKTOP\PROGRAMME2\ESGHIR_PROGRAMME2.ASM 58 : Found opcode in column 1. (return)
+Warning[203] C:\USERS\SONY\DESKTOP\PROGRAMME2\ESGHIR_PROGRAMME2.ASM 85 : Found opcode in column 1. (return)
+Warning[205] C:\USERS\SONY\DESKTOP\PROGRAMME2\ESGHIR_PROGRAMME2.ASM 86 : Found directive in column 1. (end)
